@@ -1,30 +1,53 @@
-# Síndico de IA Dashboard
+# Síndico IA — Frontend
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+Interface web do Síndico IA, construída com Next.js 15, React 19 e Tailwind CSS.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/pedroandrades-projects-3395bf13/v0-sindico-de-ia-dashboard)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/zeklStpolw3)
+O backend é mantido separadamente em
+[`v0-sindico-de-ia-dashboard`](https://github.com/ppedroandrade/v0-sindico-de-ia-dashboard).
 
-## Overview
+## Requisitos
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+- Node.js 22
+- npm
+- backend do Síndico IA disponível na porta `3002`, por padrão
 
-## Deployment
+## Configuração
 
-Your project is live at:
+```bash
+cp .env.example .env.local
+npm ci
+npm run dev
+```
 
-**[https://vercel.com/pedroandrades-projects-3395bf13/v0-sindico-de-ia-dashboard](https://vercel.com/pedroandrades-projects-3395bf13/v0-sindico-de-ia-dashboard)**
+A aplicação fica disponível em `http://localhost:3000`.
 
-## Build your app
+Variáveis disponíveis:
 
-Continue building your app on:
+```env
+# URL pública da API usada pelo navegador
+NEXT_PUBLIC_API_URL=http://localhost:3002
 
-**[https://v0.app/chat/projects/zeklStpolw3](https://v0.app/chat/projects/zeklStpolw3)**
+# URL usada pelo proxy /api do Next.js; opcional em desenvolvimento
+BACKEND_URL=http://localhost:3002
+```
 
-## How It Works
+## Scripts
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+```bash
+npm run dev    # desenvolvimento
+npm run build  # build de produção
+npm run start  # inicia o build de produção
+```
+
+## Docker
+
+```bash
+docker build \
+  --build-arg NEXT_PUBLIC_API_URL=http://localhost:3002 \
+  --build-arg BACKEND_URL=http://host.docker.internal:3002 \
+  -t sindico-ia-front .
+
+docker run --rm -p 3000:3000 \
+  -e BACKEND_URL=http://host.docker.internal:3002 \
+  sindico-ia-front
+```
