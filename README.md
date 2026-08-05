@@ -3,7 +3,7 @@
 Interface web do Síndico IA, construída com Next.js 15, React 19 e Tailwind CSS.
 
 O backend é mantido separadamente em
-[`v0-sindico-de-ia-dashboard`](https://github.com/ppedroandrade/v0-sindico-de-ia-dashboard).
+[`sindico-ia-back`](https://github.com/ppedroandrade/sindico-ia-back).
 
 ## Requisitos
 
