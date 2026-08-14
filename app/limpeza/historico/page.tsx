@@ -62,7 +62,9 @@ export default function HistoricoPage() {
                         {reservation.cleanedAt ? new Date(reservation.cleanedAt).toLocaleString("pt-BR") : "-"}
                       </p>
                       {reservation.cleaningNotes && (
-                        <p className="text-xs text-muted-foreground mt-1">"{reservation.cleaningNotes}"</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          &ldquo;{reservation.cleaningNotes}&rdquo;
+                        </p>
                       )}
                     </div>
                   </div>

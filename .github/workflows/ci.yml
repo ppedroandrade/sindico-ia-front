@@ -1,0 +1,72 @@
+name: CI — Frontend
+
+# Valida qualidade e build a cada push/PR. O job falha (e bloqueia o merge)
+# se qualquer etapa obrigatória abaixo retornar erro.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    name: Lint, tipos e build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      # `npm ci` falha se package.json e package-lock.json estiverem
+      # dessincronizados — validação de dependências já nesta etapa.
+      - name: Instalar dependências
+        run: npm ci
+
+      # Análise estática / qualidade de código
+      - name: Lint (ESLint + regras do Next.js)
+        run: npm run lint
+
+      # Verificação de tipos explícita: o `next build` está configurado com
+      # `typescript.ignoreBuildErrors`, então sem esta etapa um erro de tipo
+      # passaria despercebido para produção.
+      - name: Verificação de tipos (TypeScript)
+        run: npm run typecheck
+
+      - name: Validação do build
+        run: npm run build
+
+  security:
+    name: Vulnerabilidades em dependências
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      # Relatório informativo, não bloqueante: as vulnerabilidades altas
+      # remanescentes vêm de dependências transitivas do Next.js 15
+      # (postcss, sharp) e só têm correção no Next.js 16, um upgrade major
+      # com risco de regressão. Está registrado como melhoria futura em
+      # docs/security-audit-report.md.
+      - name: Auditoria de dependências (informativo)
+        run: npm audit --omit=dev --audit-level=high
+        continue-on-error: true
+
+      # Esta sim bloqueia: nenhuma vulnerabilidade crítica é tolerada.
+      - name: Auditoria de dependências (crítica — bloqueante)
+        run: npm audit --omit=dev --audit-level=critical
