@@ -40,3 +40,16 @@ jobs:
             docker compose pull front
             docker compose up -d front
             docker image prune -f
+
+            echo "Validando saúde do frontend após o deploy..."
+            for i in $(seq 1 15); do
+              if curl -sf http://localhost:3000/ > /dev/null; then
+                echo "Frontend respondendo — deploy validado."
+                exit 0
+              fi
+              sleep 2
+            done
+
+            echo "Frontend não respondeu após o deploy. Logs recentes:"
+            docker compose logs --tail=50 front
+            exit 1

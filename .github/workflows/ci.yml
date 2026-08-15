@@ -10,7 +10,7 @@ on:
 
 jobs:
   quality:
-    name: Lint, tipos e build
+    name: Lint, tipos, testes e build
     runs-on: ubuntu-latest
 
     steps:
@@ -37,6 +37,9 @@ jobs:
       # passaria despercebido para produção.
       - name: Verificação de tipos (TypeScript)
         run: npm run typecheck
+
+      - name: Testes unitários
+        run: npm run test
 
       - name: Validação do build
         run: npm run build
