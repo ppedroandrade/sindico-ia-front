@@ -196,7 +196,7 @@ export default function LoginPage() {
           </div>
 
           <div className="hidden space-y-1 lg:block">
-            <h2 className="font-heading text-2xl font-semibold">Entrar na sua conta</h2>
+            <h2 className="font-heading text-2xl font-semibold">Entrar na sua contaxx</h2>
             <p className="text-sm text-muted-foreground">Use o email ou usuário cadastrado pelo síndico.</p>
           </div>
 
